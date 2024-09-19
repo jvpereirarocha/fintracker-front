@@ -1,12 +1,42 @@
+<script setup>
+  import { ref, watch } from 'vue';
+  const username = ref('');
+  const password = ref('');
+  const passwordTypeField = ref('password');
+  const passwordLabel = ref('Mostrar');
+  const passwordIsHidden = ref(true);
+
+  const changePasswordType = () => {
+    passwordIsHidden.value = !passwordIsHidden.value;
+  }
+
+  watch(passwordIsHidden, (newValue) => {
+    if (newValue === false) {
+      passwordTypeField.value = 'text'
+      passwordLabel.value = 'Ocultar'
+    } else {
+      passwordTypeField.value = 'password'
+      passwordLabel.value = 'Mostrar'
+    }
+    return passwordIsHidden
+  })
+
+</script>
+
 <template>
   <div class="login-container">
     <h1>Login</h1>
-    <form action="#" method="post">
-      <label for="username">Usuário:</label>
-      <input type="text" id="username" name="username" placeholder="Digite seu usuário" required>
+    <form @submit="posting" method="post">
+      <div class="input-container">
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" name="username" placeholder="Digite seu usuário" v-model="username" required>
+      </div>
 
-      <label for="password">Senha:</label>
-      <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+      <div class="input-container">
+        <label for="password">Senha:</label>
+        <input :type="passwordTypeField" id="password" name="password" placeholder="Digite sua senha" v-model="password" required>
+        <a href="" @click.prevent="changePasswordType">{{ passwordLabel }} senha</a>
+      </div>
 
       <div class="button-container">
         <button type="submit">Entrar</button>
