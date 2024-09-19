@@ -13,8 +13,8 @@
       </div>
 
       <div class="links">
-        <a href="#">Esqueceu a senha?</a>
-        <a href="#">Registrar-se</a>
+        <RouterLink to="/forgot-password">Esqueceu a senha?</RouterLink>
+        <RouterLink to="/register">Registrar-se</RouterLink>
       </div>
     </form>
   </div>
