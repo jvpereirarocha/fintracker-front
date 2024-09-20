@@ -5,6 +5,7 @@
   const passwordTypeField = ref('password');
   const passwordLabel = ref('Mostrar');
   const passwordIsHidden = ref(true);
+  import postToBackend from '@/services/loginUser';
 
   const changePasswordType = () => {
     passwordIsHidden.value = !passwordIsHidden.value;
@@ -21,12 +22,21 @@
     return passwordIsHidden
   })
 
+  async function posting() {
+    const data = {
+      username: username.value,
+      password: password.value
+    } 
+    const response = await postToBackend("login", data, {})
+    alert(`Response is: ${response}`)
+  }
+
 </script>
 
 <template>
   <div class="login-container">
     <h1>Login</h1>
-    <form @submit="posting" method="post">
+    <form @submit.prevent="posting" method="post">
       <div class="input-container">
         <label for="username">Usuário:</label>
         <input type="text" id="username" name="username" placeholder="Digite seu usuário" v-model="username" required>
