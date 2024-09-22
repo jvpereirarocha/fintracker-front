@@ -1,10 +1,10 @@
-const USER_API = `${import.meta.env.BASE_API_URL}/users`
+const USER_API = `${import.meta.env.VITE_BASE_API_URL}/users`
 
 const getHeaders = (headers={}) => {
   if (Object.keys(headers).length === 0) {
     return new Headers({
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
+      "X-Fintracker-Origin": "frontend",
     })
   }
   
@@ -15,7 +15,7 @@ const getHeaders = (headers={}) => {
   return allHeaders
 }
 
-async function postToBackend(resource, data, headers) {
+async function postToBackend(resource, data, headers={}) {
   const url = `${USER_API}/${resource}`
   try {
     const response = await fetch(url, {
@@ -23,11 +23,9 @@ async function postToBackend(resource, data, headers) {
       method: 'POST',
       headers: getHeaders(headers)
     })
-    if (!response.ok) {
-      throw new Error(`Response status ${response.status}`)
-    }
+    const statusCode = response.status;
     const payload = await response.json();
-    return payload
+    return {payload, statusCode}
   } catch (error) {
     alert("Error! ", error)
   }

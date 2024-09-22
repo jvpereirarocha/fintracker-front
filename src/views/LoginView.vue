@@ -27,8 +27,11 @@
       username: username.value,
       password: password.value
     } 
-    const response = await postToBackend("login", data, {})
-    alert(`Response is: ${response}`)
+    const { payload, statusCode } = await postToBackend("login", data)
+    if (statusCode != 201) {
+        alert(`Não foi possível realizar o login: ${payload.detail}`)
+        return
+    }
   }
 
 </script>
