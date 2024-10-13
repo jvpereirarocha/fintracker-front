@@ -1,6 +1,6 @@
 <script setup>
   import { ref, watch } from 'vue';
-  const username = ref('');
+  const email = ref('');
   const password = ref('');
   const passwordTypeField = ref('password');
   const passwordLabel = ref('Mostrar');
@@ -37,22 +37,22 @@
 </script>
 
 <template>
-  <div class="login-container">
-    <h1>Login</h1>
+  <div class="form-container">
+    <h2>Login de usuário</h2>
     <form @submit.prevent="posting" method="post">
       <div class="input-container">
-        <label for="username">Usuário:</label>
-        <input type="text" id="username" name="username" placeholder="Digite seu usuário" v-model="username" required>
+        <label for="email">Usuário:</label>
+        <input type="email" id="email" v-model="email" name="email" placeholder="Digite seu usuário" required>
       </div>
 
       <div class="input-container">
         <label for="password">Senha:</label>
-        <input :type="passwordTypeField" id="password" name="password" placeholder="Digite sua senha" v-model="password" required>
+        <input :type="passwordTypeField" id="password" v-model="password" name="password" placeholder="Digite sua senha" required>
         <a href="" @click.prevent="changePasswordType">{{ passwordLabel }} senha</a>
       </div>
 
-      <div class="button-container">
-        <button type="submit">Entrar</button>
+      <div class="input-container">
+        <button class="button-submit" type="submit">Entrar</button>
       </div>
 
       <div class="links">
