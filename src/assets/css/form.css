@@ -1,17 +1,32 @@
 .form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
     background-color: #fff;
     color: #333;
     padding: 50px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
+    max-width: 500px;
 }
 
 label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.1rem;
+}
+
+.input-container:not(:last-child) {
+    margin-bottom: 1.5rem;
 }
 
 input[type="text"],
@@ -25,7 +40,8 @@ input[type="password"] {
     font-size: 16px;
 }
 
-input[type="submit"] {
+input[type="submit"],
+.button-submit {
     width: 100%;
     padding: 10px;
     background-color: #a23982;
