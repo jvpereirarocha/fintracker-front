@@ -4,8 +4,9 @@ import HomeView from '../views/HomeView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import LoginView from '../views/LoginView.vue'
+import { useAuthStore } from '@/stores/auth'
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -30,6 +31,16 @@ const router = createRouter({
     },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
   ]
+})
+
+router.beforeEach(async (to) => {
+  const publicPages = ['/login', '/register']
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthStore();
+  if (authRequired && !auth.user) {
+    auth.returnUrl = to.fullPath;
+    return '/login';
+  }
 })
 
 export default router

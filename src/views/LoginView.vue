@@ -1,12 +1,15 @@
 <script setup>
   import { ref, watch } from 'vue';
-  const email = ref('');
+  const username = ref('');
   const password = ref('');
   const passwordTypeField = ref('password');
   const passwordLabel = ref('Mostrar');
   const passwordIsHidden = ref(true);
-  import postToBackend from '@/services/loginUser';
+  import { useAuthStore } from '@/stores/auth'
+  import { useRouter } from 'vue-router';
 
+  const router = useRouter()
+  
   const changePasswordType = () => {
     passwordIsHidden.value = !passwordIsHidden.value;
   }
@@ -23,15 +26,20 @@
   })
 
   async function posting() {
+    const authStore = useAuthStore()
     const data = {
       username: username.value,
       password: password.value
-    } 
-    const { payload, statusCode } = await postToBackend("login", data)
-    if (statusCode != 201) {
-        alert(`Não foi possível realizar o login: ${payload.detail}`)
-        return
     }
+    const { payload, statusCode } = await authStore.login(data.username, data.password)
+    if (statusCode !== 200) {
+      alert(`Erro ao fazer login: ${payload.hasOwnProperty('detail') ? payload.detail : 'tente novamente'}`)
+      return
+    }
+    alert('Usuario logado! Você será redirecionado para a página inicial!')
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
   }
 
 </script>
@@ -41,8 +49,8 @@
     <h2>Login de usuário</h2>
     <form @submit.prevent="posting" method="post">
       <div class="input-container">
-        <label for="email">Usuário:</label>
-        <input type="email" id="email" v-model="email" name="email" placeholder="Digite seu usuário" required>
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" v-model="username" name="username" placeholder="Digite seu usuário" required>
       </div>
 
       <div class="input-container">

@@ -1,15 +1,22 @@
 <script setup>
   import { ref, watch } from 'vue';
-  const name = ref('');
+  const username = ref('');
   const email = ref('');
+  const password = ref('');
   const confirmPassword = ref('');
+  
   const passwordTypeField = ref('password');
   const confirmPasswordTypeField = ref('password');
   const passwordLabel = ref('Mostrar');
   const confirmPasswordLabel = ref('Mostrar');
   const passwordIsHidden = ref(true);
   const confirmPasswordIsHidden = ref(true);
-  import postToBackend from '@/services/loginUser';
+  
+  import { useAuthStore } from '@/stores/auth'
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter()
+  const authStore = useAuthStore()
 
   const changePasswordType = () => {
     passwordIsHidden.value = !passwordIsHidden.value;
@@ -43,16 +50,20 @@
 
   async function posting() {
     const data = {
-      name: name.value,
+      username: username.value,
       email: email.value,
       password: password.value,
       confirmPassword: confirmPassword.value
-    } 
-    const { payload, statusCode } = await postToBackend("login", data)
-    if (statusCode != 201) {
-        alert(`Não foi possível realizar o login: ${payload.detail}`)
-        return
     }
+    const { payload, statusCode } = await authStore.register(data.username, data.email, data.password, data.confirmPassword)
+    if (statusCode !== 201) {
+      alert(`Erro ao cadastrar usuário: ${payload.hasOwnProperty('detail') ? payload.detail : 'tente novamente'}`)
+      return
+    }
+    alert('Usuario cadastrado! Você será redirecionado para a página de login!')
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
   }
 
 </script>
@@ -65,8 +76,8 @@
 
     <form method="POST" @submit.prevent="posting">
       <div class="input-container">
-        <label for="name">Nome</label>
-        <input type="text" id="name" v-model="name" name="name" required />
+        <label for="username">Nome de usuário</label>
+        <input type="text" id="username" v-model="username" name="username" required />
       </div>
 
       <div class="input-container">
@@ -100,6 +111,9 @@
 
       <div class="input-container">
         <input class="button-submit" type="submit" value="Registrar" />
+      </div>
+      <div class="links">
+        <span>Já possui uma conta? <RouterLink to="/login">Fazer login</RouterLink></span>
       </div>
     </form>
   </div>
