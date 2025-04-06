@@ -57,7 +57,7 @@
     }
     const { payload, statusCode } = await authStore.register(data.username, data.email, data.password, data.confirmPassword)
     if (statusCode !== 201) {
-      alert(`Erro ao cadastrar usuário: ${payload.hasOwnProperty('detail') ? payload.detail : 'tente novamente'}`)
+      alert(`Erro ao cadastrar usuário: ${payload.hasOwnProperty('detail') ? payload.detail[0].msg : 'tente novamente'}`)
       return
     }
     alert('Usuario cadastrado! Você será redirecionado para a página de login!')
